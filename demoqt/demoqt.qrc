@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="demoqt">
+    <file>Sungkyunkwan_University_seal.svg.png</file>
+    <file>sungkyunkwanlogo.png</file>
+  </qresource>
+</RCC>
