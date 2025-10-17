@@ -71,15 +71,22 @@ demoqt::demoqt(QWidget* parent)
     ui->comPortComboBox->clear(); // Clear existing items
 
     // Add common COM port options
-    ui->comPortComboBox->addItem("COM3");
     ui->comPortComboBox->addItem("COM4");
+    ui->comPortComboBox->addItem("COM3");
     ui->comPortComboBox->addItem("Direct Input");
     ui->ComPortDirectInput->setVisible(false);
     ui->comPortPushButton->setVisible(false);
-
+    globalComPort = "COM4"; // Default comport for this PC
 
     // Assuming your QLabel's object name is imageLabel
     ui->skku_logo->setPixmap(originalPixmap.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+
+    /*
+    The following are the connectors between the buttons and the functions that they are supposed to execute. However, since some of them were doubled after first
+    initializing, I commented them out. When rebuilding the program you may need to uncomment them for the first time. 
+    */
+    //
     //connect(ui->startPrintButton, &QPushButton::clicked, this, &demoqt::on_startPrintButton_clicked, Qt::UniqueConnection);
     //connect(ui->checkLightEngineButton, &QPushButton::clicked, this, &demoqt::on_checkLightEngineButton_clicked, Qt::UniqueConnection);
     //connect(ui->selectFolderButton, &QPushButton::clicked, this, &demoqt::on_selectFolderButton_clicked, Qt::UniqueConnection);
@@ -122,6 +129,13 @@ demoqt::demoqt(QWidget* parent)
     // Clean up
     connect(worker, &Worker::finished, worker, &QObject::deleteLater);
     connect(runFullThread, &QThread::finished, runFullThread, &QObject::deleteLater);
+
+    QString message = QString("When the Light Engine is initializing, you cannot execute any further actions until the light engine has booted up.\n\n")
+        + "If the light engine has not been turned on in a while it might take some time.\n\n"
+        + "Should the process take longer than five minutes it might be a good idea to unplug the system and retry the process.\n\n"
+        + "If this does not work after multiple tries consider running the process for an extended period of time.\n\nThe light engine has shown to be sensitive to temperature. If the temperature is too low it might not turn on.";
+
+    ui->outputTerminalTextEdit->append(message);
 
 
     this->dumpObjectTree();
@@ -363,14 +377,7 @@ void demoqt::on_checkLightEngineButton_clicked() {
 
 void demoqt::on_SM12onButton_clicked() {
 
-    QString message = QString("Light Engine is initializing. You cannot execute any further actions until the light engine has booted up.\n ")
-        + "If the light engine has not been turned on in a while it might take some time. "
-        + "Should the process take longer than five minutes it might be a good idea to unplug the system and retry the process. \n"
-        + "If this does not work after multiple tries consider running the process for an extended period of time. \nThe light engine has shown to be sensitive to temperature. If the temperature is too low it might not turn on.";
-
-    ui->outputTerminalTextEdit->append(message);
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Wait for text to display
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000)); // Wait for text to display
 
 
     TurnLightEngineOn();

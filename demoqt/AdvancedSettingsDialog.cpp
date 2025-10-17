@@ -138,7 +138,7 @@ void AdvancedSettingsDialog::on_getVelocity_clicked() {
     std::string velocity = controller.GetVelocity();
     velocity.erase(std::remove(velocity.begin(), velocity.end(), '\n'), velocity.end()); // Remove newline
     velocity.erase(std::remove(velocity.begin(), velocity.end(), '\r'), velocity.end()); // Remove carriage return
-    ui->VelocityLineEdit->setText(QString::fromStdString(velocity.substr(3, 2)));
+    ui->VelocityLineEdit->setText(QString::fromStdString(velocity.substr(3, 4)));
 }
 
 void AdvancedSettingsDialog::on_setVelocity_clicked() {

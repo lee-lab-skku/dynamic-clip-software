@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>847</height>
+    <height>858</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+    <pointsize>12</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>demoqt</string>
@@ -26,6 +32,7 @@
     <property name="font">
      <font>
       <family>Segoe UI</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -264,6 +271,7 @@
         <property name="font">
          <font>
           <family>Segoe UI</family>
+          <pointsize>12</pointsize>
          </font>
         </property>
         <property name="title">
@@ -577,6 +585,7 @@
     <property name="font">
      <font>
       <family>Segoe UI</family>
+      <pointsize>12</pointsize>
       <weight>50</weight>
       <bold>false</bold>
      </font>
@@ -594,7 +603,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="LightEnginetab">
       <attribute name="title">
@@ -756,6 +765,7 @@
     <property name="font">
      <font>
       <family>Segoe UI</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -841,6 +851,7 @@
     <property name="font">
      <font>
       <family>Segoe UI</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="title">
@@ -880,7 +891,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Choose Folder</string>
+         <string>Choose CSV File</string>
         </property>
        </widget>
       </item>
@@ -893,7 +904,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Selected Folder...</string>
+         <string>Selected CSV File...</string>
         </property>
        </widget>
       </item>
@@ -905,7 +916,7 @@
      <rect>
       <x>680</x>
       <y>740</y>
-      <width>324</width>
+      <width>353</width>
       <height>51</height>
      </rect>
     </property>
@@ -924,13 +935,33 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comPortComboBox"/>
+      <widget class="QComboBox" name="comPortComboBox">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="ComPortDirectInput"/>
+      <widget class="QLineEdit" name="ComPortDirectInput">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="comPortPushButton">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Confirm</string>
        </property>
@@ -945,7 +976,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>

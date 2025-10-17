@@ -126,7 +126,7 @@ StageStatus checkStage() {
         std::string vel = controller.GetVelocity();
         vel.erase(std::remove(vel.begin(), vel.end(), '\n'), vel.end()); // Remove newline
         vel.erase(std::remove(vel.begin(), vel.end(), '\r'), vel.end()); // Remove carriage return
-        std::cout << "Velocity: " << vel.substr(3, 2) << " mm/s" << std::endl;
+        std::cout << "Velocity: " << vel.substr(3, 4) << " mm/s" << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(50));  // Wait for response
 
         std::string acc = controller.GetAcceleration();
@@ -149,7 +149,7 @@ StageStatus checkStage() {
         // Extract float values from the string using std::stof and substring operations
         // Note: Ensure the substring indices and lengths are correct for your data format
         status.position = std::stof(pos.substr(3, 6)); // Adjust according to actual format
-        status.velocity = std::stof(vel.substr(3, 2)); // Adjust according to actual format
+        status.velocity = std::stof(vel.substr(3, 4)); // Adjust according to actual format
         status.acceleration = std::stof(acc.substr(3, 2)); // Adjust according to actual format
         status.positiveLimit = std::stof(pL.substr(3, 2)); // Adjust according to actual format
         status.negativeLimit = std::stof(nL.substr(3, 2)); // Adjust according to actual format
@@ -406,6 +406,7 @@ Description:
     a sequence. The function extracts numerical values from the file names using a regular expression and compares these values to
     determine the sort order.
 Notes:
+    - Only sorts for SEC_...
     - Assumes file names contain numerical identifiers that dictate their sort order, captured using a regular expression.
     - This function is particularly useful when dealing with a series of image files that need to be processed or displayed in a
       specific sequence.
@@ -430,7 +431,7 @@ Parameters:
 Returns:
     void
 Description:
-    Moves the stage according to specified parameters, handling movements for both upward and downward directions based on the
+    Function used for stage movement in all printing processes. Moves the stage according to specified parameters, handling movements for both upward and downward directions based on the
     dlpPumpingAction value. The function ensures the stage reaches the desired positions by continually checking the controller's
     status until it reports 'Ready', indicating completion of the move. The process incorporates error handling to manage exceptions
     during movement commands, with retries as necessary.
@@ -597,8 +598,8 @@ void waitForVelocity(SMC100C& controller, float targetVelocity, float tolerance,
             vel.erase(std::remove(vel.begin(), vel.end(), '\r'), vel.end());
 
             if (vel.length() >= 2) { // Check if vel string is long enough
-                std::cout << "Velocity: " << vel.substr(3, 2) << " mm/s" << std::endl;
-                float currentVelocity = std::stof(vel.substr(3, 2)); // Safely convert string to float
+                std::cout << "Velocity: " << vel.substr(3, 4) << " mm/s" << std::endl;
+                float currentVelocity = std::stof(vel.substr(3, 4)); // Safely convert string to float
 
                 if (abs(currentVelocity - targetVelocity) < tolerance) {
                     velocityMatched = true;
@@ -762,9 +763,9 @@ void DeinitializeSystem(int inputCurrent, float initialPosition, float velocity,
     std::this_thread::sleep_for(std::chrono::milliseconds(50));  // Wait for response
 
     float intermediatePosition = position - 10.0f;
-    float positionTolerance = 0.01f;
+    float positionTolerance = 1.0f;
     float velocityTolerance = 0.5f;
-    auto timeoutSeconds = std::chrono::seconds(60); // Example: 3 seconds timeout
+    auto timeoutSeconds = std::chrono::seconds(15); // Example: 3 seconds timeout
     auto startTime = std::chrono::high_resolution_clock::now();
 
 
@@ -796,7 +797,7 @@ void DeinitializeSystem(int inputCurrent, float initialPosition, float velocity,
 
     window.clear();
     window.display();
-    SetCurrent(0, static_cast<U8>(inputCurrent));
+    SetCurrent(0, static_cast<U8>(0));
 
     GetCurrent(0, &currentValue);
     std::cout << "The  current value is: " << static_cast<int>(currentValue) << std::endl;
@@ -811,7 +812,7 @@ Parameters:
 Returns:
     void
 Description:
-    Executes a full run of the system, cycling through a sequence of images while controlling the stage based on specified parameters.
+    Non-Dynamic Print. Either DLP or Clip according to user input. Executes a full run of the system, cycling through a sequence of images while controlling the stage based on specified parameters.
     This function integrates image display, stage control, and dynamic parameter adjustments into a cohesive operation, demonstrating
     the system's full capabilities.
 Notes:
@@ -1069,10 +1070,10 @@ void RunFull(const std::string& directoryPath, int maxImageDisplayCount, float s
                 int counter = 0;
                 filenameLogged = false;
 
-                while (counter <= 1) {
+                while (counter <= 1) {//safety black screens
                     // Display the dark screen
                     window.clear();
-                    window.display();
+                    window.display();// can probably delete at some point
 
                     counter++;
                 }
@@ -1286,7 +1287,7 @@ Parameters:
 Returns:
     void
 Description:
-    Enhances the RunFull function with the ability to dynamically adjust printing parameters for each layer. This function iterates
+    Dynamic print. Either Clip or Dlp possible. Enhances the RunFull function with the ability to dynamically adjust printing parameters for each layer. This function iterates
     through a set of predefined layer settings, applying them to control the system's operation in a fine-grained manner.
 Notes:
     - Demonstrates advanced usage of the system's capabilities, allowing for complex experiments with varying parameters across layers.
@@ -1653,7 +1654,7 @@ Parameters:
 Returns:
     std::vector<std::pair<LayerSettings, int>>
 Description:
-    Reads layer settings from a specified file and organizes them into a vector of pairs, where each pair consists of LayerSettings
+    Needed for dynamic printing. Reads layer settings from a specified file and organizes them into a vector of pairs, where each pair consists of LayerSettings
     and an integer representing the number of layers to be printed with those settings.
 Notes:
     - The function demonstrates data handling and preprocessing necessary for dynamic operation modes, such as RunFullDynamic.
